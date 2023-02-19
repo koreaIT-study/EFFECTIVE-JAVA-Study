@@ -38,8 +38,147 @@ finalize()에서 발생하는 예외는 무시가 됨. 따라서 로직이 불�
 이러한 단점으로 java9에서부터 finalize()메서드가 Deprecated되었음.  
 
 
+## cleaner
+``` java
+public class BigObject {
+	private List<Object> resource;
+
+	public BigObject(List<Object> resource) {
+		this.resource = resource;
+	}
+
+	// finalize에서 하는 일을 runnable에서 한다.
+	// 주의할점은 static class로 만들어야 하고, (inner class이기 때문)
+	// 절대로 BigObject에 대한 reference가 있으면 안된다.
+	public static class ResourceCleaner implements Runnable {
+		private List<Object> resourceToClean;
+
+		public ResourceCleaner(List<Object> resourceToClean) {
+			this.resourceToClean = resourceToClean;
+		}
+
+		@Override
+		public void run() {
+			resourceToClean = null;
+			System.out.println("cleaned up.");
+		}
+	}
+}
+
+public class CleanerIsNotGoot {
+	public static void main(String[] args) throws InterruptedException {
+		// Cleaner는 Phantom Reference로 만들어졌기 때문에 비슷하다.
+		Cleaner cleaner = Cleaner.create();
+
+		List<Object> resourceToCleanUp = new ArrayList<>();
+		BigObject bigObject = new BigObject(resourceToCleanUp);
+
+		// 어떤 object가 gc가 될때 runnable을 사용해서 정리작업을 해라
+		cleaner.register(bigObject, new BigObject.ResourceCleaner(resourceToCleanUp));
+
+		bigObject = null;
+		System.gc();
+		Thread.sleep(3000L);
+	}
+}
 
 
+```  
+
+
+# 권장 하는 방법 : AutoCloseable
+AutoCloseable interface java doc내용을 보면 닫을 때까지 리소스(file or socket handles)를 보유할 수 있는 개체,  
+close()메서드는 try-with-resource블럭에서 자동적으로 호출된다고 정의되어있다.  
+
+``` java
+public class AutoClosableIsGood implements AutoCloseable {
+	private BufferedInputStream inputStream;
+
+	@Override
+	public void close() {
+		try {
+			inputStream.close();
+		} catch (IOException e) {
+			throw new RuntimeException("failed to close " + inputStream);
+		}
+	}
+}
+
+public class App {
+	public static void main(String[] args) {
+		try (AutoClosableIsGood good = new AutoClosableIsGood()) {
+			// TODO 자원 반납 처리가 됨.
+		}
+	}
+}
+
+```  
+
+## Cleaner를 언제 사용할까?
+정답: 안전망.  
+
+=> AutoCloseable을 이용해 자원반납을 하도록 만들어 놓았지만, 사용하는 client쪽에서 try-with-resource를 사용하지 않았을 경우, gc를 할 떄 자원이 반납될 수 있는 `기회`를 주도록 하는 방법이다.(안전망)  
+=> native method(C또는 C++로 된 OS에 접근할 수 있는 메서드) 자원을 해제할 때 사용할 수 있다.
+
+
+``` java
+public class Room implements AutoCloseable {
+	private static final Cleaner cleaner = Cleaner.create();
+
+	// 청소가 필요한 자원. 절대 Room을 참조해서는 안됨!
+	private static class State implements Runnable {
+		int numJunkPiles; // 방 안의 쓰레기 수
+
+		State(int numJunkPiles) {
+			this.numJunkPiles = numJunkPiles;
+		}
+
+		@Override
+		public void run() {
+			System.out.println("방 청소");
+			numJunkPiles = 0;
+		}
+	}
+
+	// 방의 상태, cleanable과 공유
+	private final State state;
+
+	// cleanable 객체, 수거 대상이 되면 방을 청소.
+	private final Cleaner.Cleanable cleanable;
+
+	public Room(int numJunkPiles) {
+		state = new State(numJunkPiles);
+		cleanable = cleaner.register(this, state);
+	}
+
+	@Override
+	public void close() throws Exception {
+		cleanable.clean();
+	}
+
+}
+
+
+// 잘 사용한 방법
+public class Adult {
+	public static void main(String[] args) throws Exception {
+		try (Room myRoom = new Room(7)) {
+			System.out.println("안녕~");
+		}
+	}
+}
+
+// 안전망
+public class Teenager {
+	public static void main(String[] args) {
+		new Room(99);
+		System.out.println("아무렴");
+
+//		System.gc();
+	}
+}
+
+```  
 
 
 
