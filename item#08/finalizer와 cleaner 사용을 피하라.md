@@ -143,9 +143,6 @@ public class LambdaExample {
 
 ```  
 
-```  
-
-
 # 권장 하는 방법 : AutoCloseable
 AutoCloseable interface java doc내용을 보면 닫을 때까지 리소스(file or socket handles)를 보유할 수 있는 개체,  
 close()메서드는 try-with-resource블럭에서 자동적으로 호출된다고 정의되어있다.  
