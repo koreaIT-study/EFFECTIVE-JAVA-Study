@@ -48,7 +48,7 @@ public class BigObject {
 	}
 
 	// finalize에서 하는 일을 runnable에서 한다.
-	// 주의할점은 static class로 만들어야 하고, (inner class이기 때문)
+	// 주의할점은 static class로 만들어야 하고,
 	// 절대로 BigObject에 대한 reference가 있으면 안된다.
 	public static class ResourceCleaner implements Runnable {
 		private List<Object> resourceToClean;
@@ -82,6 +82,66 @@ public class CleanerIsNotGoot {
 	}
 }
 
+#### 정적이 아닌 중첩클래스는 자동으로 바깥 객체의 참조를 갖는다.
+``` java
+public class OuterClass {
+	private void hi() {
+
+	}
+
+	class InnerClass {
+		public void hello() {
+			OuterClass.this.hi();
+		}
+	}
+
+	private void printField() {
+		Field[] declaredFields = InnerClass.class.getDeclaredFields();
+		for (Field field : declaredFields) {
+			System.out.println("field type : " + field.getType());
+			System.out.println("field name : " + field.getName());
+		}
+	}
+
+	public static void main(String[] args) {
+		OuterClass outerClass = new OuterClass();
+		InnerClass innerClass = outerClass.new InnerClass();
+		System.out.println(innerClass);
+		// com.example.demo.chaper01.item08.outerclass.OuterClass$InnerClass@3d012ddd
+
+		outerClass.printField();
+//		field type : class com.example.demo.chaper01.item08.outerclass.OuterClass
+//		field name : this$0
+
+	}
+}
+```  
+#### 람다 역시 바깥 객체의 참조를 갖기 쉽다.
+``` java
+public class LambdaExample {
+	private int value = 10;
+
+	private Runnable instanceLambda = () -> {
+	// 바깥 객체의 필드를 참조한 경우에만 참조가 생김.
+		System.out.println(value);
+	};
+
+	public static void main(String[] args) {
+		LambdaExample example = new LambdaExample();
+		Class<? extends Runnable> class1 = example.instanceLambda.getClass();
+		Field[] declaredFields = class1.getDeclaredFields();
+		for (Field field : declaredFields) {
+			System.out.println("field type : " + field.getType());
+			System.out.println("field name : " + field.getName());
+		}
+
+//		field type : class com.example.demo.chaper01.item08.outerclass.LambdaExample
+//		field name : arg$1
+
+	}
+}
+
+```  
 
 ```  
 
