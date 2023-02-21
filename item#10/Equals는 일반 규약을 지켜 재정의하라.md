@@ -17,3 +17,25 @@ equals, hashcode, toString, clone, finalize
 * 대칭성 : null이 아닌 모든 참조 값 x, y에 대해 x.equals(y)가 true이면, y.equals(x)가 true를 만족해야 한다. ```A.equals(B) == B.equals(A);```
 * 일관성
 * 추이성 : null이 아닌 모든 참조 값 x, y, z에 대해 x.equals(y)가 true이고, y.equals(z)가 true이면 x.equals(z)도 true가 되야 한다는 조건이다.
+
+
+
+# StackOverflowError
+## Stack
+한 쓰레드마다 쓸 수 있는 메모리 공간.
+* 메서드 호출 시, 스택에 스택 프레임이 쌓인다.
+  * 스택 프레임에 들어있는 정보 : 메서드에 전달하는 매개변수, 메서드 실행 끝내고 돌아갈 곳, 힙에 들어있는 객체에 대한 레퍼런스...
+  * 더이상 스택 프레임을 쌓을 수 없다면 StackOverFlowError 발생.
+* 스택의 사이즈를 조정하고 싶다면? -Xss1M
+
+재귀호출을 이용한 알고리즘은 스택 프레임이 많이 쓰인다. <무한루프 ex)ColorPoint.equlas(SmellPoint)>
+## Heap
+객체들이 있는 공간.
+
+가비지 컬렉터가 일을 해서 정리해주는 공간.
+
+인스턴스들을 가르키는 레퍼런스는 스택공간에 존재한다.
+
+# 리스코프 치환 원칙
+'하위 클래스의 객체'가 '상위 클래스 객체'를 대체하더라도 소프트웨어의 기능을 꺠트리지 않아야 한다.
+(semantic over syntacic, 구문 보다는 의미)
