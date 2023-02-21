@@ -29,6 +29,9 @@ equals, hashcode, toString, clone, finalize
 * 스택의 사이즈를 조정하고 싶다면? -Xss1M
 
 재귀호출을 이용한 알고리즘은 스택 프레임이 많이 쓰인다. <무한루프 ex)ColorPoint.equlas(SmellPoint)>
+
+<img width="688" alt="스크린샷 2023-02-21 오후 10 12 42" src="https://user-images.githubusercontent.com/82895809/220354189-975c06c7-87f1-45a1-a6cf-c39e1edda54f.png">
+
 ## Heap
 객체들이 있는 공간.
 
