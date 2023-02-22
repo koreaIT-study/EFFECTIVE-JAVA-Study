@@ -328,6 +328,7 @@ System.out.println(onUnitCircle(p2)); // ture
 * 구글의 AutoValue또는 Lombok을 사용
 * IDE의 코드 생성 기능 사용.
 * JDK17이상 -> Record 사용
+  * Record는 Java가 알아서 Equals, Hashcode, toString을 재정의해줌.
 
 * float, double을 제외한 기본타입은 ```==```을 통해 비교.
 * float, double은 Float.compare(float, float)와 Double.compare(double, double)로 비교.
@@ -336,6 +337,11 @@ System.out.println(onUnitCircle(p2)); // ture
 * 성능을 올리고자 한다면
   * 다를 확률이 높은 필드부터 비교한다.
   * 비교하는 비용(시간복잡도)이 적은 비교를 먼저 수행
+
+# Value 기반의 클래스(Value Object)
+**클래스처럼 생겼지만 int처럼 동작하는 클래스**
+```java.util.Optional```및 ```java.time.LocalDateTime```같은 값 기반의 클래스들
+https://docs.oracle.com/javase/8/docs/api/java/lang/doc-files/ValueBased.html
 
 # StackOverflowError
 ## Stack
