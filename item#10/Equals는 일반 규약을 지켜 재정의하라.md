@@ -338,6 +338,21 @@ System.out.println(onUnitCircle(p2)); // ture
   * 다를 확률이 높은 필드부터 비교한다.
   * 비교하는 비용(시간복잡도)이 적은 비교를 먼저 수행
 
+> ### Record
+> 불변 객체를 쉽게 생성할 수 있도록 하는 새로운 유형의 클래스
+> 
+> 기존엔 모든 필드에 final을 사용하여 명시적으로 정의하고, 생성자, 필드에 대한 접근자 메서드(getter), 
+> 상속 방지를 위해클래스 자체를 final로 선언하기도하고, equals, toString, hashCode등 재정의를 하였다.
+> 
+> 레코드 클래스를 사용하면 훨씬 간결한 방식으로 동일한 불변 데이터 객체 정의할 수 있다.
+> 
+> 컴파일러는 헤더를 통해 내부 필드를 추론 ```Point(int x, int y)```
+> 
+> 생성자를 작성하지 않아도 되고 toString, equals, hashCode 메서드에 대한 구현을 자동으로 제공
+> 
+> 레코드는 암묵적으로 final 클래스(상속불가)이고, abstract 선언 불가
+> 다른 클래스를 상속 받을 수 없음, 인터페이스 구현
+
 # Value 기반의 클래스(Value Object)
 **클래스처럼 생겼지만 int처럼 동작하는 클래스**
 ```java.util.Optional```및 ```java.time.LocalDateTime```같은 값 기반의 클래스들
