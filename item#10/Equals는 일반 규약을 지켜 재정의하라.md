@@ -128,8 +128,9 @@ System.out.println(test.equals(caseInsensitiveString)); //false
 ColorPoint a = new ColorPoint(1, 2, Color.RED);
 Point b = new Point(1, 2);
 ColorPoint c = new ColorPoint(1, 2, Color.BLUE);
+
+// 인스턴스 a, b, c가 있을 때 a.equals(b)와 a.equals(c)일 때, a.equals(c)가 되는 과정
 ```
-  * 인스턴스 a, b, c가 있을 때 a.equals(b)와 a.equals(c)일 때, a.equals(c)가 되는 과정
 
 1. 대칭성 위반
 ```java
@@ -162,7 +163,7 @@ class ColorPoint extends Point {
   }
 }
 ```
-ColorPoint 클래스의 equals 메서드가 위처럼 재정의 돼었다면
+ColorPoint 클래스의 equals 메서드가 위처럼 재정의 했다면
 ```java
 ColorPoint a = new ColorPoint(1, 2, Color.RED);
 Point b = new Point(1, 2);
@@ -171,8 +172,65 @@ System.out.println(a.equals(b)); //false
 System.out.println(b.equals(a)); //true
 ```
 
+2. 추이성 위반
+```java
+class ColorPoint extends Point {
+  
+  private final Color color;
 
+  @Override
+  public boolean equals(Object o) {
+    if(!(o instanceof Point)) return false;
 
+    //o가 일반 Point이면 색상을 무시햐고 x,y정보만 비교한다. 하지만 이것은 아주 위험한 코드다.
+    if(!(o instanceof ColorPoint)) return o.equals(this);
+    
+    //o가 ColorPoint이면 색상까지 비교한다.
+    return super.equals(o) && this.color == ((ColorPoint) o).color;
+  }
+}
+```
+위처럼 ColorPoint 클래스의 equals를 재정의 했다면
+
+```java
+ColorPoint a = new ColorPoint(1, 2, Color.RED);
+Point b = new Point(1, 2);
+ColorPoint c = new ColorPoint(1, 2, Color.BLUE);
+
+System.out.println(a.equals(b)); //true
+System.out.println(b.equals(c)); //true
+System.out.println(a.equals(c)); //false
+```
+
+3. 리스코프 치환 원칙 위반
+```java
+class CounterPointTest {
+  private static final Set<Point> unitCircle = Set.of(new Point(0, -1),
+   new Point(0, 1),
+   new Point(-1, 0),
+   new Point(1, 0)
+  );
+
+  public static boolean onUnitCircle(Point p) {
+    return unitCircle.contains(p);
+  }
+
+// Point에서 재정의된 equals
+  @Override
+  public boolean equals(Object o) {
+    if(o == null || o.getClass() != this.getClass()) {
+      return false;
+    }
+
+    Point p = (Point) o;
+    return this.x == p.x && this.y = p.y;
+  }
+}
+
+//////////////
+ColorPoint cp = new ColorPoint(1, 0, Color.RED);
+System.out.println(Point.onUnitCircle(cp)); //false
+```
 
 * 일관성 : null이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 항상 true를 반환하거나 항상 false를 반환한다. 
   * ```A.equals(B) == A.equals(B)```
