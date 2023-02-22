@@ -93,10 +93,29 @@ public boolean equals(Object anObject) {
   * ```A.equals(A) == true```
 * 대칭성 : null이 아닌 모든 참조 값 x, y에 대해 x.equals(y)가 true이면, y.equals(x)가 true를 만족해야 한다. 
   * ```A.equals(B) == B.equals(A)```
-* 일관성 : null이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 항상 true를 반환하거나 항상 false를 반환한다. 
-  * ```A.equals(B) == A.equals(B)```
+  * ```java public final class CaseInsensitiveString {
+  private final String s;
+
+  public CaseInsensitiveString(String s) {
+    this.s = Objects.requireNonNull(s);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if(o instanceof CaseInsensitiveString) {
+      return s.equalsIgnoreCase(((CaseInsensitiveString) o).s);
+    }
+
+    if(o instanceof String) { //한 방향으로만 작동!!
+      return s.equalsIgnoreCase((String) o);
+    }
+    return false;
+  }
+}```
 * 추이성 : null이 아닌 모든 참조 값 x, y, z에 대해 x.equals(y)가 true이고, y.equals(z)가 true이면 x.equals(z)도 true가 되야 한다는 조건이다. 
   * ```A.equals(B) && B.equals(C), A.equals(C)```
+* 일관성 : null이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 항상 true를 반환하거나 항상 false를 반환한다. 
+  * ```A.equals(B) == A.equals(B)```
 * null-아님 : ```A.equals(null) == false```
 
 
