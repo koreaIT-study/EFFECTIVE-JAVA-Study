@@ -16,8 +16,8 @@ equals, hashcode, toString, clone, finalize
 * 반사성 : null이 아닌 모든 참조 값 x에 대해 x.equals(x)를 만족해야한다. ```A.equals(A) == true;```
 * 대칭성 : null이 아닌 모든 참조 값 x, y에 대해 x.equals(y)가 true이면, y.equals(x)가 true를 만족해야 한다. ```A.equals(B) == B.equals(A);```
 * 일관성 : null이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 항상 true를 반환하거나 항상 false를 반환한다. ```A.equals(B) == A.equals(B)
-* 추이성 : null이 아닌 모든 참조 값 x, y, z에 대해 x.equals(y)가 true이고, y.equals(z)가 true이면 x.equals(z)도 true가 되야 한다는 조건이다. ```A.equals(B) && B.equals(C), A.equals(C)
-* null-아님 : A.equals(null) == false
+* 추이성 : null이 아닌 모든 참조 값 x, y, z에 대해 x.equals(y)가 true이고, y.equals(z)가 true이면 x.equals(z)도 true가 되야 한다는 조건이다. ```A.equals(B) && B.equals(C), A.equals(C)```
+* null-아님 : ```A.equals(null) == false```
 
 
 # StackOverflowError
