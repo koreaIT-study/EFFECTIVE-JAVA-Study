@@ -89,9 +89,11 @@ public boolean equals(Object anObject) {
 > 그리고 constant pool 영역에 이전에 같은 값을 가지고 있는 String 객체가 있다면, 그 객체의 주소값을 반환하여 참조하도록 한다.
 
 ## equals 규약
-### 반사성 : null이 아닌 모든 참조 값 x에 대해 x.equals(x)를 만족해야한다. 
+### 반사성
+**null이 아닌 모든 참조 값 x에 대해 x.equals(x)를 만족해야한다.**
 * ```A.equals(A) == true```
-### 대칭성 : null이 아닌 모든 참조 값 x, y에 대해 x.equals(y)가 true이면, y.equals(x)가 true를 만족해야 한다. 
+### 대칭성
+**null이 아닌 모든 참조 값 x, y에 대해 x.equals(y)가 true이면, y.equals(x)가 true를 만족해야 한다.**
 * ```A.equals(B) == B.equals(A)```
 ```java 
 // 대칭성이 깨지는 코드
@@ -122,7 +124,8 @@ System.out.println(caseInsensitiveString.equals(test)); //true
 System.out.println(test.equals(caseInsensitiveString)); //false
 // String 클래스에서는 CaseInsensitiveString의 존재를 모르기 때문에 False
 ```
-### 추이성 : null이 아닌 모든 참조 값 x, y, z에 대해 x.equals(y)가 true이고, y.equals(z)가 true이면 x.equals(z)도 true가 되야 한다는 조건이다. 
+### 추이성
+**null이 아닌 모든 참조 값 x, y, z에 대해 x.equals(y)가 true이고, y.equals(z)가 true이면 x.equals(z)도 true가 되야 한다는 조건이다.**
 * ```A.equals(B) && B.equals(C), A.equals(C)```
 ```java
 ColorPoint a = new ColorPoint(1, 2, Color.RED);
@@ -272,7 +275,7 @@ System.out.println(timestamp.equals(data)); // false
 ```java
 public ColorPoint {
   private Point point;
-  private Color color;
+  private Color color; // Enum
 
   public ColorPoint(int x, int y, Color color) {
     point = new Point(x, y);
@@ -292,13 +295,28 @@ public ColorPoint {
     return cp.point.equals(point) && cp.color.equals(color);
   }
 }
-```
+///////////////////
+Point p1 = new Point(1, 0);
+Point p2 = new me.whiteship.chapter02.item10.composition.ColorPoint(1, 0, Color.RED).asPoint();
 
-### 일관성 : null이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 항상 true를 반환하거나 항상 false를 반환한다. 
+System.out.println(onUnitCircle(p1)); // true
+System.out.println(onUnitCircle(p2)); // ture
+```
+> Enum에 있는 equals는 객체의 동일성만 비교한다.
+위처럼 코드를 구성하는 것이 안전하다.
+
+
+### 일관성
+**null이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 항상 true를 반환하거나 항상 false를 반환한다.**
 * ```A.equals(B) == A.equals(B)```
+객체 안에 들어있는 값이 바뀌는 경우엔 일관성이 깨질 수 있다.
+
+하지만 불변 객체면 일관성은 항상 보장된다.
+
+같은 도메인이라도 그때그때 나오는 IP정보는 다를 수 있다.
 ### null-아님  
 * ```A.equals(null) == false```
-
+객체.equals에 null을 넘겼을 때 false가 나오면 됨.
 
 # StackOverflowError
 ## Stack
