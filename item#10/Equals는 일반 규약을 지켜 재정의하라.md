@@ -11,6 +11,82 @@ equals, hashcode, toString, clone, finalize
 * 인스턴스의 '논리적 동치성'을 검사할 필요가 없다. ex) String
 * 상위 클래스에서 재정의한 equlas가 하위 클래스에도 적절하다.
 * 클래스가 private이거나 package-private이고 equals 메서드를 호출할 일이 없다.
+ 
+### equals 재정의 해야 하는 경우
+equlas를 재정의 해야 하는 경우는 객체 동일성(식별성, Object Identity)를 확인해야 하는 경우가 아니라
+
+논리적 동치성(동등성, Logical Equality)를 비교하도록 재정의 되지 않았을 경우이다.
+
+동일성(==) 비교는 객체가 참조하고 있는 주소 값을 비교한다.
+
+그래서 속성과 타입이 같아도 참조 값이 다르면 다른 객체로 구분한다.
+
+이를 해결할 수 있는 건, 동등성 비교(equals)이다.
+
+```java
+// Object 클래스 
+// 재정의 되지 않은 Object의 equals도 동일성(==) 비교를 한다.
+public boolean equals(Object obj) {
+    return (this == obj);
+}
+
+public class Point {
+	int x;
+	int y;
+	
+	public Point(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+}
+
+```
+![image](https://user-images.githubusercontent.com/82895809/220510324-b91e9d47-8ceb-43b5-aeb6-f7fe2e7ed6e9.png)
+
+근데 equals를 재정의하면 속성과 타입이 같을때 같은 객체로 비교할 수 있도록 할 수 있다.
+
+String은 equals가 재정의되어있다.
+
+```
+String a = "b";
+String b = "a";
+
+System.out.println(a.qeuals(b)); // TRUE
+```
+String도 똑같이 객체인데 이런 결과를 가져다 주는 것은 equals가 재정의 되어있기 때문이다.
+
+```
+// String 내부에서 재정의된 equals
+public boolean equals(Object anObject) {
+    if (this == anObject) {
+        return true;
+    }
+    if (anObject instanceof String) {
+        String anotherString = (String)anObject;
+        int n = value.length;
+        if (n == anotherString.value.length) {
+            char v1[] = value;
+            char v2[] = anotherString.value;
+            int i = 0;
+            while (n-- != 0) {
+                if (v1[i] != v2[i])
+                    return false;
+                i++;
+            }
+            return true;
+        }
+    }
+    return false;
+}
+```
+
+![image](https://user-images.githubusercontent.com/82895809/220511354-84a3403e-9419-4f2b-9a74-c15b8ecae72b.png)
+
+근데 String은 동일성(==) 비교를 해도 True다.
+
+> JVM에서는 String을 조금 특별히 관리하기 때문에, 객체이지만 new연산자가 아니라 리터럴("")을 이용해서 String 을 생성 할 수있다. 
+> 이때 JVM은 객체의 영역인 heap 영역이 아니라, constant pool 영역으로 찾아간다. 
+> 그리고 constant pool 영역에 이전에 같은 값을 가지고 있는 String 객체가 있다면, 그 객체의 주소값을 반환하여 참조하도록 한다.
 
 ### equals 규약
 * 반사성 : null이 아닌 모든 참조 값 x에 대해 x.equals(x)를 만족해야한다. 
