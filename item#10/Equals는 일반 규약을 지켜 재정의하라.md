@@ -343,6 +343,10 @@ System.out.println(onUnitCircle(p2)); // ture
 ```java.util.Optional```및 ```java.time.LocalDateTime```같은 값 기반의 클래스들
 https://docs.oracle.com/javase/8/docs/api/java/lang/doc-files/ValueBased.html
 
+위 코드의 Point처럼 필드에 final을 걸어준다.
+
+Record로 생성한다.
+
 # StackOverflowError
 ## Stack
 한 쓰레드마다 쓸 수 있는 메모리 공간.
