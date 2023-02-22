@@ -84,8 +84,10 @@ public boolean equals(Object anObject) {
 
 
 > ## String은 동일성(==) 비교를 해도 True다.
-> JVM에서는 String을 조금 특별히 관리하기 때문에, 객체이지만 new연산자가 아니라 리터럴("")을 이용해서 String 을 생성 할 수있다. 
+> JVM에서는 String을 조금 특별히 관리하기 때문에, 객체이지만 new연산자가 아니라 리터럴("")을 이용해서 String 을 생성 할 수 있다. 
+> 
 > 이때 JVM은 객체의 영역인 heap 영역이 아니라, constant pool 영역으로 찾아간다. 
+> 
 > 그리고 constant pool 영역에 이전에 같은 값을 가지고 있는 String 객체가 있다면, 그 객체의 주소값을 반환하여 참조하도록 한다.
 
 ## equals 규약
