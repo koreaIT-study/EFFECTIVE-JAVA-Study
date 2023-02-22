@@ -93,7 +93,9 @@ public boolean equals(Object anObject) {
   * ```A.equals(A) == true```
 * 대칭성 : null이 아닌 모든 참조 값 x, y에 대해 x.equals(y)가 true이면, y.equals(x)가 true를 만족해야 한다. 
   * ```A.equals(B) == B.equals(A)```
-```java public final class CaseInsensitiveString {
+```java 
+// 대칭성이 깨지는 코
+public final class CaseInsensitiveString {
   private final String s;
 
   public CaseInsensitiveString(String s) {
@@ -112,9 +114,24 @@ public boolean equals(Object anObject) {
     return false;
   }
 }
+
+/////////
+CaseInsensitiveString caseInsensitiveString = new CaseInsensitiveString("Test");
+String test = "test";
+System.out.println(caseInsensitiveString.equals(test)); //true
+System.out.println(test.equals(caseInsensitiveString)); //false
+// String 클래스에서는 CaseInsensitiveString의 존재를 모르기 때문에 False
 ```
 * 추이성 : null이 아닌 모든 참조 값 x, y, z에 대해 x.equals(y)가 true이고, y.equals(z)가 true이면 x.equals(z)도 true가 되야 한다는 조건이다. 
   * ```A.equals(B) && B.equals(C), A.equals(C)```
+```java
+ColorPoint a = new ColorPoint(1, 2, Color.RED);
+Point b = new Point(1, 2);
+ColorPoint c = new ColorPoint(1, 2, Color.BLUE);
+```
+  * 인스턴스 a, b, c가 있을 때 a.equals(b)와 a.equals(c)일 때, a.equals(c)가 되는 과정
+
+
 * 일관성 : null이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 항상 true를 반환하거나 항상 false를 반환한다. 
   * ```A.equals(B) == A.equals(B)```
 * null-아님 : ```A.equals(null) == false```
