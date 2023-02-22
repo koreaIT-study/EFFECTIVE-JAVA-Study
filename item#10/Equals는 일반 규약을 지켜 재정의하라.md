@@ -131,6 +131,48 @@ ColorPoint c = new ColorPoint(1, 2, Color.BLUE);
 ```
   * 인스턴스 a, b, c가 있을 때 a.equals(b)와 a.equals(c)일 때, a.equals(c)가 되는 과정
 
+1. 대칭성 
+```java
+class Point {
+  private final int x;
+  private final int y;
+
+  public Point(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if(!(o instanceof Point)) return false;
+    Point p = (Point) o;
+    return this.x == p.x && this.y == p.y;
+  }
+}
+/////////////////////////////
+class ColorPoint extends Point {
+  
+  private final Color color;
+
+  @Override
+  public boolean equals(Object o) {
+    if(!(o instanceof ColorPoint)) return false;
+    
+    return super.equals(o) && this.color == ((ColorPoint) o).color;
+  }
+}
+```
+ColorPoint 클래스의 equals 메서드가 위처럼 재정의 돼었다면
+```java
+ColorPoint a = new ColorPoint(1, 2, Color.RED);
+Point b = new Point(1, 2);
+
+System.out.println(a.equals(b)); //false
+System.out.println(b.equals(a)); //true
+```
+
+
+
 
 * 일관성 : null이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 항상 true를 반환하거나 항상 false를 반환한다. 
   * ```A.equals(B) == A.equals(B)```
