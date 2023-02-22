@@ -129,7 +129,7 @@ ColorPoint a = new ColorPoint(1, 2, Color.RED);
 Point b = new Point(1, 2);
 ColorPoint c = new ColorPoint(1, 2, Color.BLUE);
 ```
-		* 인스턴스 a, b, c가 있을 때 a.equals(b)와 a.equals(c)일 때, a.equals(c)가 되는 과정
+  * 인스턴스 a, b, c가 있을 때 a.equals(b)와 a.equals(c)일 때, a.equals(c)가 되는 과정
 
 1. 대칭성 위반
 ```java
