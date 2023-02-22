@@ -6,13 +6,13 @@ equals, hashcode, toString, clone, finalize
 
 언제 equals를 재정의 해야하나?
 
-### equals 재정의가 필요없는 경우
+## equals 재정의가 필요없는 경우
 * 각 인스턴스가 본질적으로 고유하다. (싱글턴 패턴이면 그 오브젝트는 그 자체로 고유할 수 밖에 없다. 굳이 equals가 필요한가??) (Enum도 근본적으로 단 하나다. 그러므로 Enum에도 equals재정의 필요 X)
 * 인스턴스의 '논리적 동치성'을 검사할 필요가 없다. ex) String
 * 상위 클래스에서 재정의한 equlas가 하위 클래스에도 적절하다.
 * 클래스가 private이거나 package-private이고 equals 메서드를 호출할 일이 없다.
  
-### equals 재정의 해야 하는 경우
+## equals 재정의 해야 하는 경우
 equlas를 재정의 해야 하는 경우는 객체 동일성(식별성, Object Identity)를 확인해야 하는 경우가 아니라
 
 논리적 동치성(동등성, Logical Equality)를 비교하도록 재정의 되지 않았을 경우이다.
@@ -88,11 +88,11 @@ public boolean equals(Object anObject) {
 > 이때 JVM은 객체의 영역인 heap 영역이 아니라, constant pool 영역으로 찾아간다. 
 > 그리고 constant pool 영역에 이전에 같은 값을 가지고 있는 String 객체가 있다면, 그 객체의 주소값을 반환하여 참조하도록 한다.
 
-### equals 규약
-* 반사성 : null이 아닌 모든 참조 값 x에 대해 x.equals(x)를 만족해야한다. 
-  * ```A.equals(A) == true```
-* 대칭성 : null이 아닌 모든 참조 값 x, y에 대해 x.equals(y)가 true이면, y.equals(x)가 true를 만족해야 한다. 
-  * ```A.equals(B) == B.equals(A)```
+## equals 규약
+### 반사성 : null이 아닌 모든 참조 값 x에 대해 x.equals(x)를 만족해야한다. 
+* ```A.equals(A) == true```
+### 대칭성 : null이 아닌 모든 참조 값 x, y에 대해 x.equals(y)가 true이면, y.equals(x)가 true를 만족해야 한다. 
+* ```A.equals(B) == B.equals(A)```
 ```java 
 // 대칭성이 깨지는 코드
 public final class CaseInsensitiveString {
@@ -122,8 +122,8 @@ System.out.println(caseInsensitiveString.equals(test)); //true
 System.out.println(test.equals(caseInsensitiveString)); //false
 // String 클래스에서는 CaseInsensitiveString의 존재를 모르기 때문에 False
 ```
-* 추이성 : null이 아닌 모든 참조 값 x, y, z에 대해 x.equals(y)가 true이고, y.equals(z)가 true이면 x.equals(z)도 true가 되야 한다는 조건이다. 
-  * ```A.equals(B) && B.equals(C), A.equals(C)```
+### 추이성 : null이 아닌 모든 참조 값 x, y, z에 대해 x.equals(y)가 true이고, y.equals(z)가 true이면 x.equals(z)도 true가 되야 한다는 조건이다. 
+* ```A.equals(B) && B.equals(C), A.equals(C)```
 ```java
 ColorPoint a = new ColorPoint(1, 2, Color.RED);
 Point b = new Point(1, 2);
@@ -228,13 +228,49 @@ class CounterPointTest {
 }
 
 //////////////
-ColorPoint cp = new ColorPoint(1, 0, Color.RED);
+CounterPoint cp = new CounterPoint(1, 0);
 System.out.println(Point.onUnitCircle(cp)); //false
 ```
+상위 클래스 타입으로 동작하는 어떤 코드가 있으면 하위클래스 타입의 인스턴스를 주더라도 그대로 동작해야한다.
+하지만 위의 코드는 CounterPoint를 넘겼을 때 True가 나오지 않는다.
 
-* 일관성 : null이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 항상 true를 반환하거나 항상 false를 반환한다. 
-  * ```A.equals(B) == A.equals(B)```
-* null-아님 : ```A.equals(null) == false```
+Point에서 재정의된 equals를 봤을 때 getClass로 비교하기 때문에 False를 나타낸다.
+
+```java
+@Override
+public boolean equals(Object o) {
+  if(o == null || !(o instanceof Point)) {
+    return false;
+  }
+
+  Point p = (Point) o;
+  return this.x == p.x && this.y = p.y;
+}
+/////////////
+CounterPoint cp = new CounterPoint(1, 0);
+System.out.println(Point.onUnitCircle(cp)); //true
+```
+만약 위처럼 equals가 재정의 되었다면 True가 나타났을 것이다.
+
+하지만 ColorPoint처럼 필드를 추가했을 때 추이성, 대칭성을 위반하지 않는(equals 규약을 지키는) equals를 재정의 할 수 있는 방법이 없다.
+
+이미 Java안에서도 equals규약이 지켜지지 않은 코드가 존재하는데
+
+```java
+// Timestamp는 Date를 상속받아서 만든 클래스다.
+long time = System.currentTimeMillis();
+Timestamp timestamp = new Timestamp(time);
+Date date = new Date(time);
+
+//대칭성 위배
+System.out.println(data.equals(timestamp)); // true
+System.out.println(timestamp.equals(data)); // false
+```
+
+### 일관성 : null이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 항상 true를 반환하거나 항상 false를 반환한다. 
+* ```A.equals(B) == A.equals(B)```
+### null-아님  
+* ```A.equals(null) == false```
 
 
 # StackOverflowError
