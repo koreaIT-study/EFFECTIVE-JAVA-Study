@@ -94,7 +94,7 @@ public boolean equals(Object anObject) {
 * 대칭성 : null이 아닌 모든 참조 값 x, y에 대해 x.equals(y)가 true이면, y.equals(x)가 true를 만족해야 한다. 
   * ```A.equals(B) == B.equals(A)```
 ```java 
-// 대칭성이 깨지는 코
+// 대칭성이 깨지는 코드
 public final class CaseInsensitiveString {
   private final String s;
 
@@ -129,9 +129,9 @@ ColorPoint a = new ColorPoint(1, 2, Color.RED);
 Point b = new Point(1, 2);
 ColorPoint c = new ColorPoint(1, 2, Color.BLUE);
 ```
-  * 인스턴스 a, b, c가 있을 때 a.equals(b)와 a.equals(c)일 때, a.equals(c)가 되는 과정
+		* 인스턴스 a, b, c가 있을 때 a.equals(b)와 a.equals(c)일 때, a.equals(c)가 되는 과정
 
-1. 대칭성 
+1. 대칭성 위반
 ```java
 class Point {
   private final int x;
