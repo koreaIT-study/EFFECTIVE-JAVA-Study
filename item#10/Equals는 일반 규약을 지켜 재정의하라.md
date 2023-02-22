@@ -267,6 +267,33 @@ System.out.println(data.equals(timestamp)); // true
 System.out.println(timestamp.equals(data)); // false
 ```
 
+그래서 Composition을 사용하는게 좋다. (상속을 하지 않고 새로운 클래스를 정의)
+
+```java
+public ColorPoint {
+  private Point point;
+  private Color color;
+
+  public ColorPoint(int x, int y, Color color) {
+    point = new Point(x, y);
+    this.color = Objects.requireNonNull(color);
+  }
+
+  public Point asPoint() {
+    return point;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if(!(o instanceof ColorPoint)) {
+      return false;
+    }
+    ColorPoint cp = (ColorPoint) o;
+    return cp.point.equals(point) && cp.color.equals(color);
+  }
+}
+```
+
 ### 일관성 : null이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 항상 true를 반환하거나 항상 false를 반환한다. 
 * ```A.equals(B) == A.equals(B)```
 ### null-아님  
