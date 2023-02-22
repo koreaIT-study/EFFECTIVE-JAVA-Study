@@ -318,6 +318,18 @@ System.out.println(onUnitCircle(p2)); // ture
 * ```A.equals(null) == false```
 객체.equals에 null을 넘겼을 때 false가 나오면 됨.
 
+## equals 구현 방법
+* ```==``` 연산자를 사용해 자기 자신의 참조인지 호가인.
+* ```java instanceof``` 연산자로 올바른 타입인지 확인.
+* 입력된 값을 올바른 타입으로 형변환.
+* 입력 객체와 자기 자신의 대응 되는 핵심 필드가 일치하는지 확인. // 중요!
+* 구글의 AutoValue또는 Lombok을 사용
+* IDE의 코드 생성 기능 사용.
+* JDK17이상 -> Record 사용
+
+float, double을 제외한 기본타입은 ```==```을 통해 비교
+float, double은 Float.compare(float, float)와 Double.compare(double, double)로 비교한다.
+
 # StackOverflowError
 ## Stack
 한 쓰레드마다 쓸 수 있는 메모리 공간.
