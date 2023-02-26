@@ -177,7 +177,7 @@ public int hashCode() {
 ```  
 
 * 가장 좋은 방법은 롬북의 @EqualsAndHashCode를 사용하는 것이 사용편의점 관점에서 좋다. 
-* equals를 직접 작성하면, test도 해야함. equals test도 마찬가지.
+* hashcode를 직접 작성하면, test도 해야함. equals test도 마찬가지.
 * 어떻게 hashCode를 작성하는지를 외부로 나타내지 않을수 있다.   
 
 
