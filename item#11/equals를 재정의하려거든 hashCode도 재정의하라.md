@@ -107,3 +107,77 @@ public static void main(String[] args) throws IllegalAccessException {
 
 
 
+# hashCode 구현 방법
+```  java
+@Override
+public int hashCode() {
+	int result = Short.hashCode(areaCode);
+	result = 31 * result + Short.hashCode(prefix);
+	result = 31 * result + Short.hashCode(lineNum);
+	return result;
+
+}
+```  
+1. 핵심 필드 하나의 값의 해쉬값을 계산해서 result값을 초기화한다.
+2. 기본 타입은 Type.hashCode(해당하는 Type), 참조 타입은 해당 필드의 hashCode  
+배열은 모든 원소를 재귀적으로 위의 로직을 적용하거나, Array
+result = 31 * result + 해당 필드의 hashCode 계산값
+3. result를 리턴한다. 
+![image](https://user-images.githubusercontent.com/67637716/221396458-a6494d6e-9670-4ee7-8051-6e5717ae0b32.png)  
+
+31을 곱해주는 이유??  
+1. 짝수를 가지고 연산을 하면 끝이 0으로 채워지면서 숫자가 왼쪽으로 밀리면서 날아갈수 있다.
+2. 해싱을 할 때 해싱충돌이 가장 적은 숫자가 31이다.  
+3. 별다른 이유가 없다면 일반적으로 31을 쓰는것이 좋다.  
+
+
+위와 같이 쓰지않고 아래와 같이 사용할 수 있다.  
+``` java
+@Override
+public int hashCode() {
+	return Objects.hash(areaCode, prefix, lineNum);
+}
+	
+===> Objects Class
+ public static int hash(Object... values) {
+        return Arrays.hashCode(values);
+    }
+    
+===> Arrays.hashCode()
+public static int hashCode(Object a[]) {
+if (a == null)
+    return 0;
+
+int result = 1;
+
+for (Object element : a)
+    result = 31 * result + (element == null ? 0 : element.hashCode());
+
+return result;
+}
+
+```  
+
+#### hash 캐싱
+해싱을 하려는 instance가 불변 객체이고, 해싱을 하는 연산이 많다면 밑에와 같이 캐싱을 할 수 있다.  
+지연초기화 기법을 사용할 때, 주의할점은 멀티스레드 안정성을 고려해야한다.  
+
+``` java
+private final short areaCode, prefix, lineNum;
+private int hashCode;
+
+@Override
+public int hashCode() {
+	int result = hashCode;
+	if (result == 0) { // 여러 스레드가 동시에 들어올 수 있음.  
+		result = Objects.hash(areaCode, prefix, lineNum);
+	}
+	return result;
+}
+```  
+
+
+
+
+
+
