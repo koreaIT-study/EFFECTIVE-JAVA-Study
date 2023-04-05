@@ -64,9 +64,12 @@ public class OuterTestClass {
 
 public class TestMain {
 	public static void main(String[] args) {
-		
+
 		OuterTestClass a = new OuterTestClass("김동진");
 		System.out.println(a.getName()); // Inner Class + 김동진
+
+		int apply = Calculator.Operation.PLUS.apply(1, 2);
+		System.out.println(apply); // 3
 	}
 }
 ```
