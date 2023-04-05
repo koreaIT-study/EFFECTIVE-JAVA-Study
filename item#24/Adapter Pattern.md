@@ -92,6 +92,7 @@ public class Client {
 
 ![image](https://user-images.githubusercontent.com/82895809/230016783-5226137c-e556-4034-b23a-cb2644849255.png)
 
+https://webcache.googleusercontent.com/search?q=cache:t0SfCWZX0aMJ:https://gogetem.tistory.com/entry/%25EC%2596%25B4%25EB%258C%2591%25ED%2584%25B0-%25ED%258C%25A8%25ED%2584%25B4-Class-Adaptor-vs-Object-Adaptor&cd=1&hl=ko&ct=clnk&gl=kr
 
 ## Adapter 패턴의 궁극적인 사용 이유
 어댑터 패턴은 변경할 수 없는 내부 구현, 라이브러리 등에 추가적인 기능을 만들고 싶을 때 유용하게 활용할 수 있다. 특히 기존에 사용하던 라이브러리의 동작을 바꿔야 하는 상황에서, 라이브러리의 구현을 바꾸는 것은 꽤나 위험한 선택일 것이다. 어떤 곳에서 사이드 이펙트가 발생할 지 모르기 때문이다.
