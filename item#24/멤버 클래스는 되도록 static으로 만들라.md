@@ -21,7 +21,51 @@
 
 **바깥 클래스의 인스턴스를 필요로하지 않는다.**
 
-![image](https://user-images.githubusercontent.com/82895809/230024378-281fac49-def2-4397-8aa1-0b14d1b28209.png)
+```java
+public class Calculator {
+
+//	public  int calculate(int num1, int num2, Operation operation) {
+//		switch (operation) {
+//		case PLUS:
+//			return num1 + num2;
+//		case MINUS:
+//			return num1 - num2;
+//		case MULT:
+//			return num1 * num2;
+//		case DIVIDE:
+//			return num1 / num2;
+//		default:
+//			throw new AssertionError("not supported type");
+//		}
+//	}
+
+	public enum Operation {
+		PLUS {
+			public int apply(int x, int y) {
+				return x + y;
+			}
+		},
+		MINUS {
+			public int apply(int x, int y) {
+				return x - y;
+			}
+		},
+		MULT {
+			public int apply(int x, int y) {
+				return x * y;
+			}
+		},
+		DIVIDE {
+			public int apply(int x, int y) {
+				return x / y;
+			}
+		};
+
+		public abstract int apply(int x, int y);
+	}
+}
+
+```
 
 static을 생략하면 바깥 인스턴스로의 숨은 참조가 생기고, 참조를 저장하기 위해 시간과 공간이 소비된다.   
 또한 가비지 컬렉션이 바깥 클래스의 인스턴스를 수거하지 못한다.
