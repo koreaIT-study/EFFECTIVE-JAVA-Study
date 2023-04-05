@@ -60,18 +60,6 @@ public class OuterTestClass {
         }
     }
 }
-///////////////////////////////////////////
-
-public class TestMain {
-	public static void main(String[] args) {
-
-		OuterTestClass a = new OuterTestClass("김동진");
-		System.out.println(a.getName()); // Inner Class + 김동진
-
-		int apply = Calculator.Operation.PLUS.apply(1, 2);
-		System.out.println(apply); // 3
-	}
-}
 ```
 
 ## 익명 클래스
@@ -84,21 +72,70 @@ public class TestMain {
 즉석에서 작은 함수 객체나 처리 객체를 만드는 데 주로 사용했지만 람다 등장 이후로 람다가 이 역할을 대체했다.
 
 ```java
-List<Integer> list = Arrays.asList(10, 5, 6, 7, 1, 3, 4);
+public class IntArrays {
+	static List<Integer> intArrayAsList(int[] a) {
+		return new AbstractList<Integer>() {
 
-// 익명 클래스 사용
-Collections.sort(list, new Comparator<Integer>() {
-    @Override
-    public int compare(Integer o1, Integer o2) {
-        return Integer.compare(o1, o2);
-    }
-});
+			@Override
+			public Integer get(int index) {
+				return a[index];
+			}
 
-// 람다 도입 후
-Collections.sort(list, Comparator.comparingInt(o -> o));
+			@Override
+			public Integer set(int index, Integer val) {
+				int oldVal = a[index];
+				a[index] = val;
+				return oldVal;
+			}
+
+			@Override
+			public int size() {
+				return a.length;
+			}
+		};
+	}
+}
+
+//////////////////////
+
+public class TestMain {
+	public static void main(String[] args) {
+
+		// 비정적 멤버 클래스 예시
+		OuterTestClass a = new OuterTestClass("김동진");
+		System.out.println(a.getName());
+
+		// 정적 멤버 클래스 예시
+		int apply = Calculator.Operation.MULT.apply(5, 6);
+		System.out.println(apply);
+
+		// 익명 클래스 예시
+		List<Integer> list = IntArrays.intArrayAsList(new int[] { 155, 28, 3, 4, 5, 6, 7 });
+		System.out.println(list.get(5));
+		list.set(5, 100);
+		System.out.println(list.get(5));
+
+		System.out.println("////////////////////");
+		list.stream().forEach(v -> System.out.println(v));
+
+		Collections.sort(list, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				return Integer.compare(o1, o2);
+			}
+		});
+		
+		// 람다 도입 후
+		Collections.sort(list, Comparator.comparingInt(o -> o));
+		System.out.println("/////////////////////");
+		list.stream().forEach(v -> System.out.println(v));
+	}
+}
 ```
+
+![image](https://user-images.githubusercontent.com/82895809/230030382-53cba89f-8bd2-42cc-90a9-94c1d20fb7d3.png)
+
 
 ## 지역 클래스
 가장 드물게 사용된다.   
 유효범위가 지역 변수와 같고, 비정적 문맥에서 사용될 때만 바깥 인스턴스를 참조할 수 있고, 정적 멤버는 가질 수 없고, 짧게 작성해야 한다.
-
