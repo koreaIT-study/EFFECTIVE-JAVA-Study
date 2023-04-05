@@ -30,6 +30,43 @@ static이 붙지 않은 멤버 클래스다.
 
 **비정적 멤버 클래스는 어댑터를 정의할 때 자주 쓰인다.** 즉, 어떤 클래스의 인스턴스를 감싸 마치 다른 클래스의 인스턴스처럼 보이게 하는 뷰로 사용하는 것이다.
 
+```java
+public class OuterTestClass {
+
+    private final String name;
+    
+    public OuterTestClass(String name) {
+        this.name = name;
+    }
+    
+    public String getName() {
+    	NonStaticClass nonStaticClass = new NonStaticClass("Inner Class + ");
+    	return nonStaticClass.getNameWithOuter();
+    }
+    
+    private class NonStaticClass {
+        private final String innerName;
+        
+        public NonStaticClass(String innerName) {
+            this.innerName = innerName;
+        }
+        
+        public String getNameWithOuter() {
+            return innerName + OuterTestClass.this.name;
+        }
+    }
+}
+///////////////////////////////////////////
+
+public class TestMain {
+	public static void main(String[] args) {
+		
+		OuterTestClass a = new OuterTestClass("김동진");
+		System.out.println(a.getName()); // Inner Class + 김동진
+	}
+}
+```
+
 ## 익명 클래스
 익명 클래스는 바깥 클래스의 멤버도 아니다.    
 쓰이는 시점과 동시에 인스턴스가 만들어진다.   
