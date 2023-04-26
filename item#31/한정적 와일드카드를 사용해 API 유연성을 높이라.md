@@ -97,7 +97,7 @@ Set<Number> numbers = Union.<Number>union(integers, doubles); // 명시적타입
 ```java
 public static <E extends Comparable<E>> E max(List<E> list)
 =>
-public staticc <E extends Comparable<? super E>> E max)(List<? extends E> list)
+public static <E extends Comparable<? super E>> E max)(List<? extends E> list)
 ```
 1. 입력 매개변수에서는 E 인스턴스를 생산하므로 원래의 List<E>를 List\<? extends E\> 로 수정
 2. 타입 매개변수 E는 Compable\<E\>가 E 인스턴스를 소비하기에 Comparable<? super E>로 수정<br/>
