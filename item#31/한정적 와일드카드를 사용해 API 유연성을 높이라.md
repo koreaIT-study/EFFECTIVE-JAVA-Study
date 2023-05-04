@@ -53,7 +53,7 @@ public void popAll(Collection<E> dst){
 >  Collection<Object> objects - ...;
 >  numberStack.popAll(objects);
 > ```
-이런 예시가 있다면 Collection<Object>는 Collection<Number>의 하위타입이 아니라는 오류가 뜸<br/>
+이런 예시가 있다면 Collection\<Object\>는 Collection\<Number\>의 하위타입이 아니라는 오류가 뜸<br/>
 
 <br/>
 
